@@ -1,0 +1,26 @@
+def compute_itpc(eeg, num_chans, num_freqs, freqs, wave_num=7, buf_ms=1000):
+    ITPC_all = np.zeros([num_freqs, num_chans, eeg.shape[-1] - buf_ms])
+    # ITPC_diff = np.zeros([18, 72, 1500])
+    count = 0
+    for f in freqs:
+        phase_data = MorletWaveletFilter(eeg,
+                                         np.array([f]),
+                                         output='phase',
+                                         width=wave_num,
+                                         cpus=12,
+                                         verbose=False).filter()
+        phase_data = np.squeeze(phase_data)
+        phase_data = phase_data.remove_buffer(buf_ms / 1000.)
+        euler_phase = np.exp(1j * phase_data)
+        ITPC_all[count, :, :] = abs(np.mean(euler_phase, axis=0))
+        #    ITPC_R = abs(np.mean(euler_phase[recalled, :, :], axis=0))
+        #    ITPC_NR = abs(np.mean(euler_phase[~recalled, :, :], axis=0))
+        #    ITPC_diff[count, :, :] = (ITPC_R - ITPC_NR)
+        count += 1
+    # Does the electrode show a a significant ITPC difference?
+    # ttest_results = [ttest_ind(abs(np.mean(x[recalled, :], axis=0)),
+    #                           abs(np.mean(x[~recalled, :], axis=0)),
+    #                           axis=0) for x in np.swapaxes(euler_phase.data, 0, 1)]
+    # ts = np.stack([x.statistic for x in ttest_results], -1)
+    # ps = np.stack([x.pvalue for x in ttest_results], -1)
+    return ITPC_all
