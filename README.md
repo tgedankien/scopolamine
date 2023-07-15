@@ -1,4 +1,6 @@
-ITPC and BOSC functions that accompany "Acetylcholine modulates the temporal dynamics of human theta oscillations during memory"
+## scopolamine
+
+Code for inter-trial phase coherence (ITPC) and “Better Oscillation Detection” (BOSC; Hughes et al., 2012) methods that accompany "Acetylcholine modulates the temporal dynamics of human theta oscillations during memory".
 
 Gedankien, T., Tan, R.J., Qasim, S.E., Moore, H., McDonagh, D., Jacobs, J., Lega, B.C.
 
